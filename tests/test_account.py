@@ -16,10 +16,7 @@ class TestAccount:
     @allure.description('Нажать кнопку "Личный кабинет". Проверить, что текщая страница - страница авторизации')
     def test_account_page_open_not_authorized(self, driver):
         account_page = AccountPage(driver)
-        account_page.wait_element(BasePageLocators.account_button)
-        account_page.click_element_and_waiting_element_download(BasePageLocators.account_button,
-                                                                AccountPageLocators.login_page_header)
-
+        account_page.page_open_not_authorized()
         assert account_page.get_url() == Urls.LOGIN_PAGE
 
 
@@ -28,10 +25,7 @@ class TestAccount:
     def test_account_page_open_authorized(self, driver, random_user_data, random_user_register,
                                           random_user_login, random_user_delete):
         account_page = AccountPage(driver)
-        account_page.wait_element(BasePageLocators.account_button)
-        account_page.click_element_and_waiting_element_download(BasePageLocators.account_button,
-                                                                AccountPageLocators.order_history_button)
-
+        account_page.page_open_authorized()
         assert account_page.get_url() == Urls.PROFILE_PAGE
 
 
@@ -41,9 +35,7 @@ class TestAccount:
     def test_account_open_order_history(self, driver, random_user_data, random_user_register,
                                         random_user_login, random_user_delete):
         account_page = AccountPage(driver)
-        account_page.two_clicks(BasePageLocators.account_button, AccountPageLocators.order_history_button,
-                                AccountPageLocators.order_history_button)
-
+        account_page.page_open_order_history()
         assert account_page.get_url() == Urls.ORDER_HISTORY_PAGE
 
 
@@ -53,7 +45,5 @@ class TestAccount:
     def test_account_logout(self, driver, random_user_data, random_user_register,
                             random_user_login, random_user_delete):
         account_page = AccountPage(driver)
-        account_page.two_clicks(BasePageLocators.account_button, AccountPageLocators.logout_button,
-                                AccountPageLocators.login_page_header)
-
+        account_page.page_logout()
         assert account_page.get_url() == Urls.LOGIN_PAGE

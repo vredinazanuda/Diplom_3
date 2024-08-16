@@ -1,4 +1,7 @@
+import time
+
 import allure
+import pytest
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from seletools.actions import drag_and_drop
@@ -85,13 +88,29 @@ class BasePage:
 
 
     @allure.step("Сформировать заказ из двух ингредиентов и передать номер заказа")
-    def place_order_get_number(self, first_ingredient, second_ingredient):
+    def place_order_get_number(self, first_ingredient, second_ingredient, tty = 5):
         self.add_ingredient_to_basket(first_ingredient)
         self.add_ingredient_to_basket(second_ingredient)
         self.click_element(BasePageLocators.basket_button)
         self.wait_element(BasePageLocators.number_in_new_order_modal)
+        check_tty = 0
         while self.text_element(BasePageLocators.number_in_new_order_modal) == '9999':
-            pass
+            if check_tty == tty:
+                pytest.fail("excess limits")
+            check_tty += 1
+            time.sleep(1)
         number = self.text_element(BasePageLocators.number_in_new_order_modal)
         self.click_element(BasePageLocators.modal_close_button)
         return number
+
+    @allure.step("Проверить совпадение url-a")
+    def check_url(self, url):
+        WebDriverWait(self.driver, 5).until(expected_conditions.url_to_be(url))
+
+    @allure.step("Два последовательных клика с ожиданием загрузки элементов")
+    def two_clicks(self, locator_1, locator_2, locator_3):
+        self.wait_element(locator_1)
+        self.click_element(locator_1)
+        self.wait_element(locator_2)
+        self.click_element(locator_2)
+        self.wait_element(locator_3)

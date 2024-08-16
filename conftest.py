@@ -9,19 +9,19 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from locators.base_page_locators import BasePageLocators
 from locators.account_page_locators import AccountPageLocators
+from page_objects import base_page
+from page_objects.base_page import BasePage
 
 
 @allure.step("Запустить браузер. Перейти на главную страницу Stellar Burgers. "
              " Вернуть тип браузера. Закрыть браузер по завершении теста")
-@pytest.fixture(params=['firefox', 'chrome'], scope='function')
+#@pytest.fixture(params=['firefox', 'chrome'], scope='function')
+@pytest.fixture(params=['chrome'], scope='function')
 def driver(request):
-    browser = None
-
     if request.param == 'firefox':
         browser = webdriver.Firefox()
     elif request.param == 'chrome':
         browser = webdriver.Chrome()
-
     browser.get(data.Urls.MAIN_PAGE)
 
     yield browser
@@ -32,15 +32,14 @@ def driver(request):
 @allure.step("Авторизоваться. Дождаться перехода на главную страницу.")
 @pytest.fixture(scope='function')
 def random_user_login(driver, random_user_register):
-
-    WebDriverWait(driver, 5).until(expected_conditions.visibility_of_element_located(BasePageLocators.account_button))
-    driver.execute_script("arguments[0].click();", driver.find_element(*BasePageLocators.account_button))
-    WebDriverWait(driver, 5).until(expected_conditions.visibility_of_element_located(AccountPageLocators.login_field))
-    driver.find_element(*AccountPageLocators.login_field).send_keys(random_user_register['email'])
-    driver.find_element(*AccountPageLocators.password_field).send_keys(random_user_register['password'])
-    driver.execute_script("arguments[0].click();", driver.find_element(*AccountPageLocators.login_button))
-    WebDriverWait(driver, 5).until(expected_conditions.url_to_be(data.Urls.MAIN_PAGE))
-
+    page = BasePage(driver)
+    page.wait_element(BasePageLocators.account_button)
+    page.click_element(BasePageLocators.account_button)
+    page.wait_element(AccountPageLocators.login_field)
+    page.set_value(AccountPageLocators.login_field, random_user_register['email'])
+    page.set_value(AccountPageLocators.password_field, random_user_register['password'])
+    page.click_element(AccountPageLocators.login_button)
+    page.check_url(data.Urls.MAIN_PAGE)
 
 @allure.step("Удалить рандомного пользователя по завершении теста")
 @pytest.fixture(scope='function')

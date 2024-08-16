@@ -14,11 +14,7 @@ class TestRecoveryPassword:
                         ' с эндпоинтом /forgot-password')
     def test_recovery_page_open_from_login_page(self, driver):
         recovery_page = RecoveryPage(driver)
-        recovery_page.open_page_and_waiting_element_download(Urls.LOGIN_PAGE,
-                                                             RecoveryPageLocators.recovery_password_link)
-        recovery_page.click_element_and_waiting_element_download(RecoveryPageLocators.recovery_password_link,
-                                                                 RecoveryPageLocators.recovery_input_email_field)
-
+        recovery_page.open_from_login_page()
         assert recovery_page.get_url() == Urls.RECOVERY_INPUT_EMAIL_PAGE
 
 
@@ -28,13 +24,7 @@ class TestRecoveryPassword:
                         'с эндпоинтом /reset-password')
     def test_recovery_input_email_and_open_next_page(self, driver):
         recovery_page = RecoveryPage(driver)
-        recovery_page.open_page_and_waiting_element_download(Urls.RECOVERY_INPUT_EMAIL_PAGE,
-                                                             RecoveryPageLocators.recovery_input_email_field)
-        recovery_page.set_value_click_button_and_wait(RecoveryPageLocators.recovery_input_email_field,
-                                                      data.Credentials.EMAIL,
-                                                      RecoveryPageLocators.recovery_button,
-                                                      RecoveryPageLocators.recovery_input_password_field)
-
+        recovery_page.input_email_and_open_next_page()
         assert recovery_page.get_url() == Urls.RECOVERY_INPUT_PASSWORD_PAGE
 
 
@@ -44,16 +34,5 @@ class TestRecoveryPassword:
                         ' изменил значение на "text"')
     def test_recovery_password_visibility(self, driver):
         recovery_page = RecoveryPage(driver)
-        recovery_page.open_page_and_waiting_element_download(Urls.RECOVERY_INPUT_EMAIL_PAGE,
-                                                             RecoveryPageLocators.recovery_input_email_field)
-        recovery_page.set_value_click_button_and_wait(RecoveryPageLocators.recovery_input_email_field,
-                                                      data.Credentials.EMAIL,
-                                                      RecoveryPageLocators.recovery_button,
-                                                      RecoveryPageLocators.recovery_input_password_field)
-        recovery_page.set_value_click_button_and_wait(RecoveryPageLocators.recovery_input_password_field,
-                                                      data.Credentials.PASSWORD,
-                                                      RecoveryPageLocators.recovery_input_password_visibility_button,
-                                                      RecoveryPageLocators.recovery_input_visible_password_field)
-
-
+        recovery_page.test_recovery_password_visibility()
         assert recovery_page.get_attribute(RecoveryPageLocators.recovery_input_visible_password_field, 'type') == 'text'

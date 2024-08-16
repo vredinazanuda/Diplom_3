@@ -19,3 +19,7 @@ class OrderFeedPageLocators:
     counter_all_time = [By.XPATH, ".//p[text()='Выполнено за все время:']/../p[contains(@class, 'OrderFeed_number')]"]
     counter_today = [By.XPATH, ".//p[text()='Выполнено за сегодня:']/../p[contains(@class, 'OrderFeed_number')]"]
     status_box = [By.XPATH, ".//ul[contains(@class, 'OrderFeed_orderListReady')]"]
+    order_feed_locator_form = ".//ul[contains(@class, 'OrderFeed_list')]//p[contains(text(), '#0{order_number}')]"
+    order_history_locator_form = ".//ul[contains(@class, 'OrderHistory_profileList')]//p[contains(text(), '#0{order_number}')]"
+    order_list_locator_form = ".//ul[contains(@class, 'OrderFeed_orderList_')]/li[text()={order_number}]"
+    order_list_ready_locator_form = ".//ul[contains(@class, 'OrderFeed_orderListReady')]/li[text()={order_number}]"

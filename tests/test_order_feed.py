@@ -1,4 +1,6 @@
 import allure
+from pycparser.ply.yacc import token
+
 from conftest import driver
 from conftest import random_user_data
 from conftest import random_user_register
@@ -10,6 +12,7 @@ from locators.base_page_locators import BasePageLocators
 from locators.order_feed_page_locators import OrderFeedPageLocators
 from locators.account_page_locators import AccountPageLocators
 from locators.main_page_locators import MainPageLocators
+from page_objects.order_feed_page import OrderFeedPage
 from data import Urls
 
 
@@ -21,13 +24,7 @@ class TestOrderFeedPage:
                         'заказа в модальном окне')
     def test_order_feed_page_open_order(self, driver):
         feed_page = OrderFeedPage(driver)
-        feed_page.click_element_and_waiting_element_download(BasePageLocators.feed_button,
-                                                             OrderFeedPageLocators.top_order)
-        top_order_in_feed = feed_page.text_element(OrderFeedPageLocators.top_order_number_in_feed)
-        feed_page.click_element_and_waiting_element_download(OrderFeedPageLocators.top_order,
-                                                             OrderFeedPageLocators.modal_opened_section)
-        order_in_modal = feed_page.text_element(OrderFeedPageLocators.order_number_in_modal)
-
+        top_order_in_feed, order_in_modal = feed_page.feed_page_open_order()
         assert top_order_in_feed == order_in_modal
 
 
@@ -39,17 +36,7 @@ class TestOrderFeedPage:
     def test_order_feed_order_in_history_exists_in_feed(self, driver, random_user_data, random_user_register,
                                                         random_user_login, random_user_delete):
         feed_page = OrderFeedPage(driver)
-        order_number = feed_page.place_order_get_number(MainPageLocators.ingredient_bun_link,
-                                                        MainPageLocators.ingredient_filling_link)
-        feed_page.click_element_and_waiting_element_download(BasePageLocators.feed_button,
-                                                             OrderFeedPageLocators.top_order)
-        is_order_in_feed = feed_page.is_displayed_order_in_feed(order_number)
-        feed_page.click_element_and_waiting_element_download(BasePageLocators.account_button,
-                                                             AccountPageLocators.order_history_button)
-        feed_page.click_element_and_waiting_element_download(AccountPageLocators.order_history_button,
-                                                             AccountPageLocators.order_history_list)
-        is_order_in_history = feed_page.is_displayed_order_in_history(order_number)
-
+        is_order_in_feed, is_order_in_history = feed_page.feed_order_in_history_exists_in_feed()
         assert is_order_in_feed and is_order_in_history
 
 
@@ -64,19 +51,7 @@ class TestOrderFeedPage:
     def test_order_feed_page_counters_growth(self, driver, random_user_data, random_user_register,
                                              random_user_login, random_user_delete, counter):
         feed_page = OrderFeedPage(driver)
-        feed_page.click_element_and_waiting_element_download(BasePageLocators.feed_button, counter)
-        counter_before = feed_page.text_element(counter)
-        feed_page.open_page_and_waiting_element_download(Urls.MAIN_PAGE, MainPageLocators.ingredient_bun_link)
-        order_number = feed_page.place_order_get_number(MainPageLocators.ingredient_bun_link,
-                                                        MainPageLocators.ingredient_filling_link)
-        feed_page.click_element_and_waiting_element_download(BasePageLocators.feed_button, counter)
-        feed_page.wait_element(OrderFeedPageLocators.status_box)
-        order_number_in_in_process_box = OrderFeedPage.order_number_in_in_process_box_element(order_number)
-        feed_page.wait_order_in_box(order_number_in_in_process_box)
-        order_number_in_ready_box = OrderFeedPage.order_number_in_ready_box_element(order_number)
-        feed_page.wait_order_in_box(order_number_in_ready_box)
-        counter_after = feed_page.text_element(counter)
-
+        counter_after, counter_before = feed_page.feed_page_counters_growth(counter)
         assert counter_after > counter_before
 
 
@@ -88,11 +63,5 @@ class TestOrderFeedPage:
     def test_order_feed_page_order_number_in_status_box(self, driver, random_user_data, random_user_register,
                                                         random_user_login, random_user_delete):
         feed_page = OrderFeedPage(driver)
-        order_number = feed_page.place_order_get_number(MainPageLocators.ingredient_bun_link,
-                                                        MainPageLocators.ingredient_filling_link)
-        feed_page.click_element_and_waiting_element_download(BasePageLocators.feed_button,
-                                                             OrderFeedPageLocators.status_box)
-        order_number_in_in_process_box = OrderFeedPage.order_number_in_in_process_box_element(order_number)
-        feed_page.wait_order_in_box(order_number_in_in_process_box)
-
+        order_number = feed_page.feed_page_order_number_in_status_box()
         assert feed_page.is_displayed_order_in_status_box_in_process(order_number)
