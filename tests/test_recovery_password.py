@@ -34,5 +34,5 @@ class TestRecoveryPassword:
                         ' изменил значение на "text"')
     def test_recovery_password_visibility(self, driver):
         recovery_page = RecoveryPage(driver)
-        recovery_page.test_recovery_password_visibility()
-        assert recovery_page.get_attribute(RecoveryPageLocators.recovery_input_visible_password_field, 'type') == 'text'
+        recovery_page.recovery_password_visibility()
+        assert recovery_page.check_recovery_password_visibility()

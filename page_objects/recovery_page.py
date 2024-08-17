@@ -27,7 +27,7 @@ class RecoveryPage(BasePage):
                                                       RecoveryPageLocators.recovery_input_password_field)
 
     @allure.step('Клик по кнопке показать/скрыть пароль делает поле активным — подсвечивает его.')
-    def test_recovery_password_visibility(self):
+    def recovery_password_visibility(self):
         self.open_page_and_waiting_element_download(Urls.RECOVERY_INPUT_EMAIL_PAGE,
                                                              RecoveryPageLocators.recovery_input_email_field)
         self.set_value_click_button_and_wait(RecoveryPageLocators.recovery_input_email_field,
@@ -37,4 +37,8 @@ class RecoveryPage(BasePage):
         self.set_value_click_button_and_wait(RecoveryPageLocators.recovery_input_password_field,
                                                       Credentials.PASSWORD,
                                                       RecoveryPageLocators.recovery_input_password_visibility_button,
-                                                      RecoveryPageLocators.recovery_input_visible_password_field)
+                                                          RecoveryPageLocators.recovery_input_visible_password_field)
+
+    @allure.step('Проверка клика по кнопке показать/скрыть пароль')
+    def check_recovery_password_visibility(self):
+        return self.get_attribute(RecoveryPageLocators.recovery_input_visible_password_field, 'type') == 'text'

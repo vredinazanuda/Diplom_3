@@ -45,7 +45,7 @@ class TestMainPage:
     def test_main_page_ingredient_modal_close(self, driver):
         main_page = MainPage(driver)
         main_page.page_ingredient_modal_close()
-        assert not main_page.is_elements_exist(MainPageLocators.modal_opened_section)
+        assert not main_page.check_page_ingredient_modal_close()
 
 
     @allure.title('При добавлении ингредиента в заказ счётчик этого ингридиента увеличивается')
@@ -64,4 +64,4 @@ class TestMainPage:
                                                       random_user_login, random_user_delete):
         main_page = MainPage(driver)
         order_id_before, order_id_after = main_page.page_place_order_authorized_success()
-        assert order_id_after != order_id_before and main_page.is_elements_exist(MainPageLocators.modal_opened_section)
+        assert order_id_after != order_id_before and main_page.check_page_ingredient_modal_close()

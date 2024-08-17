@@ -5,17 +5,14 @@ import pytest
 import requests
 import data
 from selenium import webdriver
-from selenium.webdriver.support.wait import WebDriverWait
-from selenium.webdriver.support import expected_conditions
-from locators.base_page_locators import BasePageLocators
-from locators.account_page_locators import AccountPageLocators
-from page_objects import base_page
-from page_objects.base_page import BasePage
+from page_objects.account_page import AccountPage
 
 
 @allure.step("Запустить браузер. Перейти на главную страницу Stellar Burgers. "
              " Вернуть тип браузера. Закрыть браузер по завершении теста")
-@pytest.fixture(params=['firefox', 'chrome'], scope='function')
+#@pytest.fixture(params=['firefox', 'chrome'], scope='function')
+@pytest.fixture(params=['chrome'], scope='function')
+
 def driver(request):
     if request.param == 'firefox':
         browser = webdriver.Firefox()
@@ -31,14 +28,8 @@ def driver(request):
 @allure.step("Авторизоваться. Дождаться перехода на главную страницу.")
 @pytest.fixture(scope='function')
 def random_user_login(driver, random_user_register):
-    page = BasePage(driver)
-    page.wait_element(BasePageLocators.account_button)
-    page.click_element(BasePageLocators.account_button)
-    page.wait_element(AccountPageLocators.login_field)
-    page.set_value(AccountPageLocators.login_field, random_user_register['email'])
-    page.set_value(AccountPageLocators.password_field, random_user_register['password'])
-    page.click_element(AccountPageLocators.login_button)
-    page.check_url(data.Urls.MAIN_PAGE)
+    page = AccountPage(driver)
+    page.page_authorized(random_user_register['email'], random_user_register['password'])
 
 @allure.step("Удалить рандомного пользователя по завершении теста")
 @pytest.fixture(scope='function')

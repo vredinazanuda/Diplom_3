@@ -2,8 +2,6 @@ import allure
 
 import locators.order_feed_page_locators
 from locators.base_page_locators import BasePageLocators
-from locators.main_page_locators import MainPageLocators
-from locators.account_page_locators import AccountPageLocators
 from locators.order_feed_page_locators import OrderFeedPageLocators
 from page_objects.base_page import BasePage
 from selenium.webdriver.common.by import By
@@ -66,15 +64,15 @@ class OrderFeedPage(BasePage):
 
     @allure.step('Заказы пользователя из раздела «История заказов» отображаются на странице «Лента заказов»')
     def feed_order_in_history_exists_in_feed(self):
-        order_number = self.place_order_get_number(MainPageLocators.ingredient_bun_link,
-                                                        MainPageLocators.ingredient_filling_link)
+        order_number = self.place_order_get_number(OrderFeedPageLocators.ingredient_bun_link,
+                                                        OrderFeedPageLocators.ingredient_filling_link)
         self.click_element_and_waiting_element_download(BasePageLocators.feed_button,
                                                              OrderFeedPageLocators.top_order)
         is_order_in_feed = self.is_displayed_order_in_feed(order_number)
         self.click_element_and_waiting_element_download(BasePageLocators.account_button,
-                                                             AccountPageLocators.order_history_button)
-        self.click_element_and_waiting_element_download(AccountPageLocators.order_history_button,
-                                                             AccountPageLocators.order_history_list)
+                                                             OrderFeedPageLocators.order_history_button)
+        self.click_element_and_waiting_element_download(OrderFeedPageLocators.order_history_button,
+                                                             OrderFeedPageLocators.order_history_list)
         is_order_in_history = self.is_displayed_order_in_history(order_number)
         return is_order_in_feed, is_order_in_history
 
@@ -82,9 +80,9 @@ class OrderFeedPage(BasePage):
     def feed_page_counters_growth(self, counter):
         self.click_element_and_waiting_element_download(BasePageLocators.feed_button, counter)
         counter_before = self.text_element(counter)
-        self.open_page_and_waiting_element_download(Urls.MAIN_PAGE, MainPageLocators.ingredient_bun_link)
-        order_number = self.place_order_get_number(MainPageLocators.ingredient_bun_link,
-                                                        MainPageLocators.ingredient_filling_link)
+        self.open_page_and_waiting_element_download(Urls.MAIN_PAGE, OrderFeedPageLocators.ingredient_bun_link)
+        order_number = self.place_order_get_number(OrderFeedPageLocators.ingredient_bun_link,
+                                                        OrderFeedPageLocators.ingredient_filling_link)
         self.click_element_and_waiting_element_download(BasePageLocators.feed_button, counter)
         self.wait_element(OrderFeedPageLocators.status_box)
         order_number_in_in_process_box = OrderFeedPage.order_number_in_in_process_box_element(order_number)
@@ -96,8 +94,8 @@ class OrderFeedPage(BasePage):
 
     @allure.step('После оформления заказа его номер появляется в разделе В работе.')
     def feed_page_order_number_in_status_box(self):
-        order_number = self.place_order_get_number(MainPageLocators.ingredient_bun_link,
-                                                        MainPageLocators.ingredient_filling_link)
+        order_number = self.place_order_get_number(OrderFeedPageLocators.ingredient_bun_link,
+                                                        OrderFeedPageLocators.ingredient_filling_link)
         self.click_element_and_waiting_element_download(BasePageLocators.feed_button,
                                                              OrderFeedPageLocators.status_box)
         order_number_in_in_process_box = OrderFeedPage.order_number_in_in_process_box_element(order_number)

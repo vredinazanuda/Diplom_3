@@ -23,3 +23,10 @@ class OrderFeedPageLocators:
     order_history_locator_form = ".//ul[contains(@class, 'OrderHistory_profileList')]//p[contains(text(), '#0{order_number}')]"
     order_list_locator_form = ".//ul[contains(@class, 'OrderFeed_orderList_')]/li[text()={order_number}]"
     order_list_ready_locator_form = ".//ul[contains(@class, 'OrderFeed_orderListReady')]/li[text()={order_number}]"
+    ingredient_filling_counter = [By.XPATH,
+                                  ".//a[@href='/ingredient/61c0c5a71d1f82001bdaaa6e']//p[contains(@class, 'counter')]"]
+    ingredient_bun_link = [By.XPATH, ".//a[@href='/ingredient/61c0c5a71d1f82001bdaaa6c']"]
+    ingredient_filling_link = [By.XPATH, ".//a[@href='/ingredient/61c0c5a71d1f82001bdaaa6e']"]
+    order_history_button = [By.XPATH, ".//nav[contains(@class, 'Account_nav')]//a[text()='История заказов']"]
+    order_history_list = [By.XPATH,
+                          ".//div[contains(@class, 'Account_contentBox')]//ul[contains(@class, 'OrderHistory_list')]"]

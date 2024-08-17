@@ -59,3 +59,7 @@ class MainPage(BasePage):
                                                              MainPageLocators.order_id)
         order_id_after = self.text_element(MainPageLocators.order_id)
         return order_id_before, order_id_after
+
+    @allure.step('Проверка всплывающего окна с деталями ингредиента')
+    def check_page_ingredient_modal_close(self):
+        return self.is_elements_exist(MainPageLocators.modal_opened_section)
