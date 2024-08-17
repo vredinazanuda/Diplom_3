@@ -10,9 +10,7 @@ from page_objects.account_page import AccountPage
 
 @allure.step("Запустить браузер. Перейти на главную страницу Stellar Burgers. "
              " Вернуть тип браузера. Закрыть браузер по завершении теста")
-#@pytest.fixture(params=['firefox', 'chrome'], scope='function')
-@pytest.fixture(params=['chrome'], scope='function')
-
+@pytest.fixture(params=['firefox', 'chrome'], scope='function')
 def driver(request):
     if request.param == 'firefox':
         browser = webdriver.Firefox()
